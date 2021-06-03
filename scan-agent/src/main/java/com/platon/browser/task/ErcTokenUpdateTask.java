@@ -97,7 +97,7 @@ public class ErcTokenUpdateTask {
 
     private static final ExecutorService HOLDER_UPDATE_POOL = Executors.newFixedThreadPool(HOLDER_BATCH_SIZE);
 
-    private static final int INVENTORY_BATCH_SIZE = 10;
+    private static final int INVENTORY_BATCH_SIZE = 100;
 
     private final static OkHttpClient client = new OkHttpClient.Builder()
             .connectionPool(new ConnectionPool(50, 5, TimeUnit.MINUTES))
@@ -200,9 +200,9 @@ public class ErcTokenUpdateTask {
                         // 查询总供应量
                         BigInteger totalSupply = ercServiceImpl.getTotalSupply(token.getAddress());
                         totalSupply = totalSupply == null ? BigInteger.ZERO : totalSupply;
-                        if (token.getTotalSupply().compareTo(new BigDecimal(totalSupply)) != 0) {
+                        if (!token.getTotalSupply().equalsIgnoreCase(totalSupply.toString())) {
                             // 有变动添加到更新列表中
-                            token.setTotalSupply(new BigDecimal(totalSupply));
+                            token.setTotalSupply(totalSupply.toString());
                             token.setUpdateTime(new Date());
                             updateParams.add(token);
                         }
@@ -339,7 +339,7 @@ public class ErcTokenUpdateTask {
                             TokenHolder holder = new TokenHolder();
                             holder.setTokenAddress(contract);
                             holder.setAddress(address);
-                            holder.setBalance(new BigDecimal(balance));
+                            holder.setBalance(balance.toString());
                             holder.setUpdateTime(DateUtil.date());
                             updateParams.add(holder);
                             try {
@@ -390,9 +390,9 @@ public class ErcTokenUpdateTask {
                                 ErcToken token = ercCache.getTokenCache().get(holder.getTokenAddress());
                                 if (token != null) {
                                     BigInteger balance = ercServiceImpl.getBalance(holder.getTokenAddress(), token.getTypeEnum(), holder.getAddress());
-                                    if (holder.getBalance().compareTo(new BigDecimal(balance)) != 0) {
+                                    if (new BigDecimal(holder.getBalance()).compareTo(new BigDecimal(balance)) != 0) {
                                         // 余额有变动才加入更新列表，避免频繁访问表
-                                        holder.setBalance(new BigDecimal(balance));
+                                        holder.setBalance(balance.toString());
                                         holder.setUpdateTime(DateUtil.date());
                                         updateParams.add(holder);
                                     }
@@ -467,7 +467,7 @@ public class ErcTokenUpdateTask {
             AtomicInteger errorNum = new AtomicInteger(0);
             try {
                 TokenInventoryExample condition = new TokenInventoryExample();
-                condition.setOrderByClause(" create_time asc limit " + page * INVENTORY_BATCH_SIZE + "," + INVENTORY_BATCH_SIZE);
+                condition.setOrderByClause(" id asc limit " + page * INVENTORY_BATCH_SIZE + "," + INVENTORY_BATCH_SIZE);
                 batch = tokenInventoryMapper.selectByExample(condition);
                 List<TokenInventory> updateParams = new ArrayList<>();
                 if (!batch.isEmpty()) {
@@ -484,7 +484,6 @@ public class ErcTokenUpdateTask {
                                 if (response.code() == 200) {
                                     resp = response.body().string();
                                     TokenInventory newTi = JSONUtil.toBean(resp, TokenInventory.class);
-                                    newTi.setUpdateTime(DateUtil.date());
                                     newTi.setTokenId(inventory.getTokenId());
                                     newTi.setTokenAddress(inventory.getTokenAddress());
                                     boolean changed = false;
@@ -502,13 +501,14 @@ public class ErcTokenUpdateTask {
                                         changed = true;
                                     }
                                     if (changed) {
-                                        inventory.setUpdateTime(new Date());
                                         updateParams.add(inventory);
                                     }
                                 } else {
+                                    errorNum.getAndIncrement();
                                     log.error("http请求异常：http状态码:{},http消息:{},当前标识为:{},token_address:{}, token_id:{}, tokenURI:{}", response.code(), response.message(), pageNum, inventory.getTokenAddress(), inventory.getTokenId(), tokenURI);
                                 }
                             } else {
+                                errorNum.getAndIncrement();
                                 log.error("请求TokenURI为空,当前标识为:{},token_address：{},token_id:{}", finalPage, inventory.getTokenAddress(), inventory.getTokenId());
                             }
                         } catch (Exception e) {
@@ -573,7 +573,7 @@ public class ErcTokenUpdateTask {
         AtomicInteger errorNum = new AtomicInteger(0);
         try {
             TokenInventoryExample condition = new TokenInventoryExample();
-            condition.setOrderByClause(" create_time asc limit " + pageNum * INVENTORY_BATCH_SIZE + "," + INVENTORY_BATCH_SIZE);
+            condition.setOrderByClause(" id asc limit " + pageNum * INVENTORY_BATCH_SIZE + "," + INVENTORY_BATCH_SIZE);
             // 分页更新token库存相关信息
             List<TokenInventory> batch = tokenInventoryMapper.selectByExample(condition);
             batchNum = CommonUtil.ofNullable(() -> batch.size()).orElse(0);
@@ -610,9 +610,11 @@ public class ErcTokenUpdateTask {
                                     updateParams.add(inventory);
                                 }
                             } else {
+                                errorNum.getAndIncrement();
                                 log.error("http请求异常：http状态码:{},http消息:{},当前标识为:{},token_address:{}, token_id:{}, tokenURI:{}", response.code(), response.message(), pageNum, inventory.getTokenAddress(), inventory.getTokenId(), tokenURI);
                             }
                         } else {
+                            errorNum.getAndIncrement();
                             log.error("请求TokenURI为空,当前标识为:{},token_address：{},token_id:{}", pageNum, inventory.getTokenAddress(), inventory.getTokenId());
                         }
                     } catch (Exception e) {

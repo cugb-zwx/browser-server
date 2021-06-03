@@ -1,5 +1,6 @@
 package com.platon.browser.service;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
@@ -27,7 +28,10 @@ import com.platon.browser.service.elasticsearch.EsErc721TxRepository;
 import com.platon.browser.service.elasticsearch.bean.ESResult;
 import com.platon.browser.service.elasticsearch.query.ESQueryBuilderConstructor;
 import com.platon.browser.service.elasticsearch.query.ESQueryBuilders;
-import com.platon.browser.utils.*;
+import com.platon.browser.utils.ConvertUtil;
+import com.platon.browser.utils.DateUtil;
+import com.platon.browser.utils.HexUtil;
+import com.platon.browser.utils.I18nUtil;
 import com.platon.browser.v0152.enums.ErcTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -307,31 +311,18 @@ public class ErcTxService {
                 BigDecimal balance = ConvertUtil.convertByFactor(originBalance, tokenHolder.getDecimal());
                 resp.setBalance(balance);
                 //计算总供应量
-                BigDecimal originTotalSupply = tokenHolder.getTotalSupply();
+                BigDecimal originTotalSupply = new BigDecimal(tokenHolder.getTotalSupply());
                 originTotalSupply = (originTotalSupply == null) ? BigDecimal.ZERO : originTotalSupply;
                 BigDecimal totalSupply = ConvertUtil.convertByFactor(originTotalSupply, tokenHolder.getDecimal());
-                if (totalSupply.compareTo(BigDecimal.ZERO) > 0) {
-                    // 总供应量大于0, 使用实际的余额除以总供应量
-                    resp.setPercent(
-                            balance
-                                    .divide(totalSupply, decimal, RoundingMode.HALF_UP)
-                                    .multiply(BigDecimal.valueOf(100))
-                                    .setScale(decimal, RoundingMode.HALF_UP)
-                                    .stripTrailingZeros()
-                                    .toPlainString() + "%"
-                    );
-                } else {
-                    // 总供应量小于等于0,则计算每个持有者数占总数的比例
-                    int holderNum = map.get(tokenHolder.getAddress()).intValue();
-                    int total = ids.getResult().size();
-                    String percent = new BigDecimal(holderNum)
-                            .divide(new BigDecimal(total), decimal, RoundingMode.HALF_UP)
-                            .multiply(BigDecimal.valueOf(100))
-                            .setScale(decimal, RoundingMode.HALF_UP)
-                            .stripTrailingZeros()
-                            .toPlainString() + "%";
-                    resp.setPercent(percent);
-                }
+                int holderNum = map.get(tokenHolder.getAddress()).intValue();
+                int total = Convert.toInt(ids.getTotal());
+                String percent = new BigDecimal(holderNum)
+                        .divide(new BigDecimal(total), decimal, RoundingMode.HALF_UP)
+                        .multiply(BigDecimal.valueOf(100))
+                        .setScale(decimal, RoundingMode.HALF_UP)
+                        .stripTrailingZeros()
+                        .toPlainString() + "%";
+                resp.setPercent(percent);
             } else {
                 resp.setBalance(originBalance);
                 resp.setPercent("0.0000%");
@@ -381,20 +372,21 @@ public class ErcTxService {
     public AccountDownload exportTokenHolderList(String contract, String local, String timeZone) {
         PageHelper.startPage(1, 30000);
         Page<CustomTokenHolder> rs = this.customTokenHolderMapper.selectListByParams(contract, null, null);
+        Map<String, Long> map = rs.getResult().stream().collect(Collectors.groupingBy(CustomTokenHolder::getAddress, Collectors.counting()));
         List<Object[]> rows = new ArrayList<>();
         rs.stream().forEach(customTokenHolder -> {
             BigDecimal balance = this.getAddressBalance(customTokenHolder);
-            // 总供应量作为分母，为0的话，则百分比为0
-            BigDecimal percentage;
-            if (MathUtil.isZeroOrNull(customTokenHolder.getTotalSupply())) {
-                percentage = BigDecimal.ZERO;
-            } else {
-                percentage = balance.divide(customTokenHolder.getTotalSupply(), 4, RoundingMode.HALF_UP)
-                        .multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP);
-            }
+            int holderNum = map.get(customTokenHolder.getAddress()).intValue();
+            int total = Convert.toInt(rs.getTotal());
+            String percent = new BigDecimal(holderNum)
+                    .divide(new BigDecimal(total), decimal, RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(100))
+                    .setScale(decimal, RoundingMode.HALF_UP)
+                    .stripTrailingZeros()
+                    .toPlainString() + "%";
             Object[] row = {customTokenHolder.getAddress(),
                     HexUtil.append(ConvertUtil.convertByFactor(balance, customTokenHolder.getDecimal()).toString()),
-                    percentage.toString() + "%"
+                    percent
             };
             rows.add(row);
         });
@@ -490,7 +482,7 @@ public class ErcTxService {
 
     private BigDecimal getAddressBalance(CustomTokenHolder tokenHolder) {
         //暂时由后台统计余额
-        return tokenHolder.getBalance();
+        return new BigDecimal(tokenHolder.getBalance());
 //        return this.ercService.getBalance(erc20TokenAddressRel.getContract(), erc20TokenAddressRel.getAddress());
     }
 

@@ -1,6 +1,5 @@
-#######################
-#      Alaya配置      #
-#######################
+# ***************************开发配置**************************** #
+# 当前激活的配置名称(请不要修改)
 profile: dev
 # 密码加密配置
 jasypt:
@@ -15,11 +14,11 @@ spring:
     password: platon
   #Redis配置
   redis:
-    password: platscan
-    database: 0
     cluster:
       max-redirects: 3
       nodes: 192.168.16.171:7001,192.168.16.171:7002,192.168.16.171:7000,192.168.16.172:7000,192.168.16.172:7001,192.168.16.172:7002
+    password: platscan
+    ssl: false
   #ES配置
   elasticsearch:
     high-level-client:
@@ -47,20 +46,20 @@ disruptor:
 logging:
   #日志级别
   level:
-    org.springframework: error
-    org.springframework.retry: error
-    com.platon.browser: error
-    com.platon.browser.bootstrap: error
-    com.platon.browser.collection: error
-    com.platon.browser.collection.queue.handler: error
-    com.platon.browser.common: error
-    com.platon.browser.complement: error
-    com.platon.browser.complement.handler: error
-    com.platon.browser.complement.converter: error
-    com.platon.browser.persistence: error
-    com.platon.browser.persistence.handler: error
-    com.platon.browser.persistence.queue.handler: error
-    com.platon.browser.task: error
+    org.springframework: info
+    org.springframework.retry: info
+    com.platon.browser: info
+    com.platon.browser.bootstrap: info
+    com.platon.browser.collection: info
+    com.platon.browser.collection.queue.handler: info
+    com.platon.browser.common: info
+    com.platon.browser.complement: info
+    com.platon.browser.complement.handler: info
+    com.platon.browser.complement.converter: info
+    com.platon.browser.persistence: info
+    com.platon.browser.persistence.handler: info
+    com.platon.browser.persistence.queue.handler: info
+    com.platon.browser.task: info
   file:
     name: ./logs/${spring.application.name}-${version}-${profile}.log
   pattern:
@@ -146,8 +145,7 @@ v0150:
   #调账提案ID
   adjustmentPipId: '1609410836.4141252'
   #调账日志输出文件
-  adjustLogFilePath: ./adjust.log
-
+  adjustLogFilePath: ./logs/staking-delegate-adjust.log
 task:
   #地址统计任务批次大小
   addressBatchSize: 1000
