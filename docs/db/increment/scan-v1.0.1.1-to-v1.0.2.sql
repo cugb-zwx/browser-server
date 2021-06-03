@@ -1,4 +1,4 @@
-USE `scan_platon`;
+USE `scan_alaya`;
 
 alter table token modify total_supply varchar(128) DEFAULT NULL COMMENT '总供应量';
 
