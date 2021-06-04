@@ -118,11 +118,13 @@ public class StatisticService {
                     updateNodeList.add(updateNode);
                     updateNodeCacheSettleStatis(node.getNodeId(), JSONUtil.toJsonStr(nodeSettleStatis));
                 });
-                int res = customNodeMapper.updateNodeSettleStatis(updateNodeList);
-                if (res > 0) {
-                    log.info("节点列表在共识轮数[{}]块高[{}]当选出块节点[{}]更新成功", event.getEpochMessage().getConsensusEpochRound(), event.getEpochMessage().getCurrentBlockNumber(), JSONUtil.toJsonStr(updateNodeList));
-                } else {
-                    log.error("节点列表在共识轮数[{}]块高[{}]当选出块节点[{}]更新失败", event.getEpochMessage().getConsensusEpochRound(), event.getEpochMessage().getCurrentBlockNumber(), JSONUtil.toJsonStr(updateNodeList));
+                if (CollUtil.isNotEmpty(updateNodeList)) {
+                    int res = customNodeMapper.updateNodeSettleStatis(updateNodeList);
+                    if (res > 0) {
+                        log.info("节点列表({})在共识轮数[{}]块高[{}]当选出块节点,更新数据成功", updateNodeList.stream().map(v -> v.getNodeId()).collect(Collectors.toList()), event.getEpochMessage().getConsensusEpochRound(), event.getEpochMessage().getCurrentBlockNumber());
+                    } else {
+                        log.error("节点列表({})在共识轮数[{}]块高[{}]当选出块节点,更新数据失败", updateNodeList.stream().map(v -> v.getNodeId()).collect(Collectors.toList()), event.getEpochMessage().getConsensusEpochRound(), event.getEpochMessage().getCurrentBlockNumber());
+                    }
                 }
             }
         } catch (Exception e) {
@@ -272,9 +274,9 @@ public class StatisticService {
         updateNode.setNodeSettleStatisInfo(json);
         int res = nodeMapper.updateByPrimaryKeySelective(updateNode);
         if (res > 0) {
-            log.info("节点在结算周期的出块统计信息[{}]更新成功", json);
+            log.info("节点在最近[{}]个结算周期的出块统计信息[{}]更新成功", CommonConstant.BLOCK_RATE_SETTLE_EPOCH_NUM, json);
         } else {
-            log.error("节点在结算周期的出块统计信息[{}]更新失败", json);
+            log.error("节点在最近[{}]个结算周期的出块统计信息[{}]更新失败", CommonConstant.BLOCK_RATE_SETTLE_EPOCH_NUM, json);
         }
     }
 
