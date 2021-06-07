@@ -1,6 +1,6 @@
 # ***************************开发配置**************************** #
 # 当前激活的配置名称(请不要修改)
-profile: alaya
+profile: prod
 # 密码加密配置
 jasypt:
   encryptor:
@@ -9,13 +9,11 @@ jasypt:
 spring:
   #数据源配置
   datasource:
-    url: jdbc:mysql://192.168.9.191:3306/alaya_browser_hrpatp201018v10000?useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    url: jdbc:mysql://192.168.9.191:3306/platon_browser_hrplat100v10000?useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
     username: ENC(bpshgjWOgn2d+oGmSTBPNA==)
     password: ENC(bpshgjWOgn2d+oGmSTBPNA==)
 #PlatOn相关配置
 platon:
-  addressPrefix: atp
-  valueUnit: LAT
   #链id
   chainId: 201018
   # Web3j访问地址
@@ -36,6 +34,8 @@ task:
   #    生产：每1分钟执行一次：0 0/1 * * * ?
   #    测试：每5秒钟执行一次：0/5 * * * * ?
   innerContractCron: 0/5 * * * * ?
+  #地址统计任务批次大小
+  addressBatchSize: 1000
 #日志配置
 logging:
   #日志级别

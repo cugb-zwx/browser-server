@@ -19,7 +19,7 @@ spring:
   #数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://_DB_HOST_:_DB_PORT_/alaya_browser_0.15.2.0_hyp?useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    url: jdbc:mysql://_DB_HOST_:_DB_PORT_/_DB_NAME_?useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
     # 使用p6spy监控SQL
     # driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     # url: jdbc:p6spy:mysql://_DB_HOST_:_DB_PORT_/alaya_browser_0.15.2.0_hyp?useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
@@ -80,7 +80,7 @@ logging:
       # 日志归档的文件名，日志文件达到一定大小之后，自动进行压缩归档
       file-name-pattern: ./logs/${spring.application.name}-${profile}-%d{yyyy-MM-dd}-%i.gz
       # 日志文件保存的天数
-      max-history: 1
+      max-history: 7
       # 是否在应用启动时进行归档管理
       clean-history-on-start: true
 #初始化链相关的配置
