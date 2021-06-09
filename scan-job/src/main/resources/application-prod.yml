@@ -21,6 +21,12 @@ platon:
     #HTTP或WS
     protocol: HTTP
     addresses: 192.168.120.151:6789,192.168.120.151:6790
+  #区块最大Gas限制
+  maxBlockGasLimit: 201600000
+  # 初始内置节点默认质押金额(ATP)
+  defaultStakingLockedAmount: 10500
+  # 交易输入参数并行解码线程数
+  txLogDecodeThreadNum: 200
 task:
   #允许更新的最大地址数量
   maxAddressCount: 5004
