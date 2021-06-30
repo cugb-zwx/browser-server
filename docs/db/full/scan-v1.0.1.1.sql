@@ -494,8 +494,9 @@ VALUES
 ( 'atp16lellpkrv894hmg8am7ns3p2qny2vqj85ud8s6', 1, 1, 1, '1', 'admin', '1', 'admin' ),
 ( 'atp1h3y5wt82z09amcd4mrhpz4jt543t5r9td9v49s', 1, 1, 1, '1', 'admin', '1', 'admin' );
 
+-- 初始化数据
 INSERT INTO `internal_address` (`address`,`type`)
-VALUES ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp7pn3ep', 1),
-       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzsjx8h7', 2),
-       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqrdyjj2v', 3),
-       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxlcypcy', 6);
+VALUES ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp8h9fxw', 1),
+       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzfyslg3', 2),
+       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr5jy24r', 3),
+       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxxwje8t', 6);
