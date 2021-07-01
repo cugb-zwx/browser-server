@@ -78,29 +78,22 @@ public class FixIssue1583 {
         List<FixIssue1583> list = new ArrayList<>();
 
         FixIssue1583 issue1583 = new FixIssue1583();
-        issue1583.setNodeId("0xf2ec2830850a4e9dd48b358f908e1f22448cf5b0314750363acfd6a531edd2056237d39d182b92891a58e7d9862a43ee143a049167b7700914c41c726fad1399");
-        issue1583.setStakingBlockNumber(502569L);
+        issue1583.setNodeId("0xaef93e9cb7c4488de216f8ed12cad9ddecfd2150ae4cc6a5045ba286ce26276910cf8c6e4df633c2964160cc3bca8015cff2c55a41294e979767d5b0effb48b0");
+        issue1583.setStakingBlockNumber(22L);
         issue1583.setRecoveredEpoch(216);
-        issue1583.setTotalDelegationAmount(new BigInteger("3185100027705555555556"));
-        issue1583.setTotalDelegationRewardAmount(new BigInteger("8599922061705855512"));
-        issue1583.addRecoveredDelegation(new RecoveredDelegation("atp12trrqnpqkj2kn03cwz5ae4v7lfshvqetqrkeez", new BigInteger("1000000000000000000")));
-        issue1583.addRecoveredDelegation(new RecoveredDelegation("atp143ml5dd3qz3wykmg4p3vnp9eqlugd9sxmgpsux", new BigInteger("2000000000000000000")));
-        issue1583.addRecoveredDelegation(new RecoveredDelegation("atp1687slxxcghuhxgv3uy6v2epftn8nhn9jss2sd6", new BigInteger("9361750080000000000")));
-        issue1583.addRecoveredDelegation(new RecoveredDelegation("atp1dtmhmexryrg7h8tzsufrg4d9y48sne7rr5ezsj", new BigInteger("1150000000000000000")));
-        issue1583.addRecoveredDelegation(new RecoveredDelegation("atp1y4arxmjpy5grkp9attefax07z56wcuq2n5937u", new BigInteger("2806452320000000000")));
-        issue1583.addRecoveredDelegation(new RecoveredDelegation("atp1z3w63q0q6rnrqw55s4hhu7ewfep0vcqaxt508d", new BigInteger("1612074080000000000")));
+        issue1583.setTotalDelegationAmount(new BigInteger("3000000000000000000"));
+        issue1583.setTotalDelegationRewardAmount(new BigInteger("2072192513368983957211"));
+        issue1583.addRecoveredDelegation(new RecoveredDelegation("atp1g004udw6gy2z2vc4t5d7a77qdrlx3nk07ce9fv", new BigInteger("1000000000000000000")));
         list.add(issue1583);
 
         FixIssue1583 issue15832 = new FixIssue1583();
-        issue15832.setNodeId("0xfff1010bbf1762d13bf13828142c612a7d287f0f1367f8104a78f001145fd788fb44b87e9eac404bc2e880602450405850ff286658781dce130aee981394551d");
-        issue15832.setStakingBlockNumber(902037L);
+        issue15832.setNodeId("0x13915ba5e9f988d1438aab6b66828887c2445f746af799a679a153c2b7704e10d24500ba600ec53c259a859aa3544d1a225f26d38e0ab6f1b58db2847fe3a93b");
+        issue15832.setStakingBlockNumber(42L);
         issue15832.setRecoveredEpoch(475);
-        issue15832.setTotalDelegationAmount(new BigInteger("10986475785670000000000"));
-        issue15832.setTotalDelegationRewardAmount(new BigInteger("8790854215894931178"));
-        issue15832.addRecoveredDelegation(new RecoveredDelegation("atp1rek8y8nz07tdp4v469xmuyymar8qe0pnejknyw", new BigInteger("18729736290000000000")));
-        issue15832.addRecoveredDelegation(new RecoveredDelegation("atp1szy8d7094kl0q82la9l2pfz3hjy99zh730flw4", new BigInteger("89940584120000000000")));
-        issue15832.addRecoveredDelegation(new RecoveredDelegation("atp15wekgs8q07rs24dmnwmdgd0qhqwvqlus6dh5g5", new BigInteger("62385695880000000000")));
-        issue15832.addRecoveredDelegation(new RecoveredDelegation("atp1cmfc2nea3am2znutaunaze2q8t6ttyrcu7mjqh", new BigInteger("16252405540000000000")));
+        issue15832.setTotalDelegationAmount(new BigInteger("8000000000000000000"));
+        issue15832.setTotalDelegationRewardAmount(new BigInteger("1069518716577540106951"));
+        issue15832.addRecoveredDelegation(new RecoveredDelegation("atp1zc3k2zd7j72d3h045h43hgzgy8wsvan2lnpegt", new BigInteger("2000000000000000000")));
+        issue15832.addRecoveredDelegation(new RecoveredDelegation("atp13t9ml06m5q5p6yl277xagwhl734zhl2dteywzw", new BigInteger("2000000000000000000")));
         list.add(issue15832);
 
         return list;
