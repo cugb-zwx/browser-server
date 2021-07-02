@@ -78,8 +78,8 @@ public class FixIssue1583 {
         List<FixIssue1583> list = new ArrayList<>();
 
         FixIssue1583 issue1583 = new FixIssue1583();
-        issue1583.setNodeId("0xaef93e9cb7c4488de216f8ed12cad9ddecfd2150ae4cc6a5045ba286ce26276910cf8c6e4df633c2964160cc3bca8015cff2c55a41294e979767d5b0effb48b0");
-        issue1583.setStakingBlockNumber(22L);
+        issue1583.setNodeId("0x5801350aa672441894c753f41e5c7c52b2a4374e7902e52f4a8cacdc33cd1a6ca63bdb7ecda710b5a6500bfb53bb80bd046aba63fc326f11a0971b91bfb1225a");
+        issue1583.setStakingBlockNumber(32L);
         issue1583.setRecoveredEpoch(216);
         issue1583.setTotalDelegationAmount(new BigInteger("3000000000000000000"));
         issue1583.setTotalDelegationRewardAmount(new BigInteger("2072192513368983957211"));
@@ -88,7 +88,7 @@ public class FixIssue1583 {
 
         FixIssue1583 issue15832 = new FixIssue1583();
         issue15832.setNodeId("0x13915ba5e9f988d1438aab6b66828887c2445f746af799a679a153c2b7704e10d24500ba600ec53c259a859aa3544d1a225f26d38e0ab6f1b58db2847fe3a93b");
-        issue15832.setStakingBlockNumber(42L);
+        issue15832.setStakingBlockNumber(53L);
         issue15832.setRecoveredEpoch(475);
         issue15832.setTotalDelegationAmount(new BigInteger("8000000000000000000"));
         issue15832.setTotalDelegationRewardAmount(new BigInteger("1069518716577540106951"));
