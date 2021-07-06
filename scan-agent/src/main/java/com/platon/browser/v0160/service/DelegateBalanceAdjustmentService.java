@@ -33,12 +33,16 @@ public class DelegateBalanceAdjustmentService {
 
     @Resource
     private NodeMapper nodeMapper;
+
     @Resource
     private StakingMapper stakingMapper;
+
     @Resource
     private AddressMapper addressMapper;
+
     @Resource
     private CustomAddressMapper customAddressMapper;
+
     @Resource
     private AddressCache addressCache;
 
@@ -101,7 +105,7 @@ public class DelegateBalanceAdjustmentService {
             newNode.setHaveDeleReward(newHaveDeleReward);
             int res = nodeMapper.updateByPrimaryKeySelective(newNode);
             if (res > 0) {
-                log.info("issue1583调账：更新node表成功,nodeId:[{}]：所有质押已领取委托奖励新值[{}]=所有质押已领取委托奖励旧值[{}]+总共被领取的委托奖励[{}];",
+                log.error("issue1583调账：更新node表成功,nodeId:[{}]：所有质押已领取委托奖励新值[{}]=所有质押已领取委托奖励旧值[{}]+总共被领取的委托奖励[{}];",
                         nodeInfo.getNodeId(),
                         newHaveDeleReward, oldHaveDeleReward, totalDeleReward);
             } else {
@@ -132,7 +136,7 @@ public class DelegateBalanceAdjustmentService {
             newStaking.setHaveDeleReward(newHaveDeleReward);
             int res = stakingMapper.updateByPrimaryKeySelective(newStaking);
             if (res > 0) {
-                log.info("issue1583调账：更新staking表成功,stakingKey:[{}]：节点当前质押已领取委托奖励新值[{}]=节点当前质押已领取委托奖励旧值[{}]+总共被领取的委托奖励[{}];",
+                log.error("issue1583调账：更新staking表成功,stakingKey:[{}]：节点当前质押已领取委托奖励新值[{}]=节点当前质押已领取委托奖励旧值[{}]+总共被领取的委托奖励[{}];",
                         JSONUtil.toJsonStr(stakingKey),
                         newHaveDeleReward, oldHaveDeleReward, totalDeleReward);
             } else {
@@ -154,7 +158,7 @@ public class DelegateBalanceAdjustmentService {
             if (CollUtil.isNotEmpty(updateDBlist)) {
                 customAddressMapper.batchUpdateByAddress(updateDBlist);
             }
-            log.info("issue1583调账：更新address表成功,数据为:[{}]", JSONUtil.toJsonStr(list));
+            log.error("issue1583调账：更新address表成功,数据为:[{}]", JSONUtil.toJsonStr(list));
         } catch (Exception e) {
             log.error("issue1583调账：更新address表失败,数据为:[{}]", JSONUtil.toJsonStr(list));
             throw e;
@@ -181,6 +185,8 @@ public class DelegateBalanceAdjustmentService {
                 } else {
                     // db存在，则存放到updateDBlist，走db的更新方式
                     updateDBlist.add(recoveredDelegationAmount);
+                    BigDecimal newHaveReward = addressInfo.getHaveReward().add(recoveredDelegationAmount.getRecoveredDelegationAmount());
+                    log.error("地址已领取的委托奖励字段新值[{}]=已领取的委托奖励字段旧值[{}]+已领取委托奖励[{}]", newHaveReward, addressInfo.getHaveReward(), recoveredDelegationAmount.getRecoveredDelegationAmount());
                 }
             } else {
                 // 缓存存在则直接更新已领取委托奖励
