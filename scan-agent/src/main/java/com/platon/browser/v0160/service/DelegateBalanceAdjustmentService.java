@@ -26,6 +26,7 @@ import java.util.List;
 
 /**
  * 兼容底层升级到0.16.0的调账功能，对应底层issue1583
+ * 因该功能的特殊性，故该类的日志级别改为error
  */
 @Slf4j
 @Service
@@ -80,7 +81,7 @@ public class DelegateBalanceAdjustmentService {
             updateStaking(stakingKey, totalDeleReward);
         }
         if (CollUtil.isNotEmpty(recoveredDelegationAmountList)) {
-            updateAddressAndDelegation(recoveredDelegationAmountList);
+            updateAddress(recoveredDelegationAmountList);
         }
     }
 
@@ -146,13 +147,13 @@ public class DelegateBalanceAdjustmentService {
     }
 
     /**
-     * 更新delegation表和address表
+     * 更新address表
      *
      * @param list
      * @return: void
      * @date: 2021/6/29
      */
-    private void updateAddressAndDelegation(List<RecoveredDelegationAmount> list) {
+    private void updateAddress(List<RecoveredDelegationAmount> list) {
         try {
             List<RecoveredDelegationAmount> updateDBlist = updateAddressCache(list);
             if (CollUtil.isNotEmpty(updateDBlist)) {
@@ -186,7 +187,7 @@ public class DelegateBalanceAdjustmentService {
                     // db存在，则存放到updateDBlist，走db的更新方式
                     updateDBlist.add(recoveredDelegationAmount);
                     BigDecimal newHaveReward = addressInfo.getHaveReward().add(recoveredDelegationAmount.getRecoveredDelegationAmount());
-                    log.error("地址已领取的委托奖励字段新值[{}]=已领取的委托奖励字段旧值[{}]+已领取委托奖励[{}]", newHaveReward, addressInfo.getHaveReward(), recoveredDelegationAmount.getRecoveredDelegationAmount());
+                    log.error("更新地址表成功：地址已领取的委托奖励字段新值[{}]=已领取的委托奖励字段旧值[{}]+已领取委托奖励[{}]", newHaveReward, addressInfo.getHaveReward(), recoveredDelegationAmount.getRecoveredDelegationAmount());
                 }
             } else {
                 // 缓存存在则直接更新已领取委托奖励
