@@ -487,6 +487,7 @@ CREATE TABLE `internal_address` (
                                     KEY `type` (`type`) USING BTREE
 );
 
+
 -- 初始化数据
 INSERT INTO `token_expand` ( `address`, `is_show_in_aton`, `is_show_in_scan`, `is_can_transfer`, `create_id`, `create_name`, `update_id`, `update_name` )
 VALUES
@@ -495,7 +496,7 @@ VALUES
 ( 'atp1h3y5wt82z09amcd4mrhpz4jt543t5r9td9v49s', 1, 1, 1, '1', 'admin', '1', 'admin' );
 
 INSERT INTO `internal_address` (`address`,`type`)
-VALUES ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp7pn3ep', 1),
-       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzsjx8h7', 2),
-       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqrdyjj2v', 3),
-       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxlcypcy', 6);
+VALUES ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp8h9fxw', 1),
+       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzfyslg3', 2),
+       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr5jy24r', 3),
+       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxxwje8t', 6);
