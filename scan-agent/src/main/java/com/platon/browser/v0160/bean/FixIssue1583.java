@@ -79,10 +79,10 @@ public class FixIssue1583 {
 
         FixIssue1583 issue1583 = new FixIssue1583();
         issue1583.setNodeId("0x104005f1bb2cefa6059be68d8f7b6dd0ed7b325688c88c6d03be8df471e5979b3d45157835cc2795566855392eb77274b61b3197f3dba129350cd2f61b6f9a0a");
-        issue1583.setStakingBlockNumber(718L);
+        issue1583.setStakingBlockNumber(1304L);
         issue1583.setRecoveredEpoch(216);
         issue1583.setTotalDelegationAmount(new BigInteger("5000000000000000000"));
-        issue1583.setTotalDelegationRewardAmount(new BigInteger("2834054521573192732"));
+        issue1583.setTotalDelegationRewardAmount(new BigInteger("2765804603715826539"));
         issue1583.addRecoveredDelegation(new RecoveredDelegation("atp1a78ls0s4zrw66dwmx0h6vu6lp2wffjn52ftfkk", new BigInteger("1000000000000000000")));
         issue1583.addRecoveredDelegation(new RecoveredDelegation("atp1tmdug9sv5kv06wu87yvhuedzat7mqwtk2runc9", new BigInteger("1000000000000000000")));
         issue1583.addRecoveredDelegation(new RecoveredDelegation("atp1vtesk9c9eqq3aalajlnnvgxw7a86gq8dw423x9", new BigInteger("1000000000000000000")));
@@ -91,10 +91,10 @@ public class FixIssue1583 {
 
         FixIssue1583 issue15832 = new FixIssue1583();
         issue15832.setNodeId("0x50b6d2f6490040ac0813d0aa0042d6020b0e537d5922805b00de7180bbdb29fca4877fdbf2d2dcd570b8ac9a904c02c69a60c9089239bfff04e0252886ef1158");
-        issue15832.setStakingBlockNumber(722L);
+        issue15832.setStakingBlockNumber(1308L);
         issue15832.setRecoveredEpoch(475);
         issue15832.setTotalDelegationAmount(new BigInteger("7000000000000000000"));
-        issue15832.setTotalDelegationRewardAmount(new BigInteger("2834054521573192732"));
+        issue15832.setTotalDelegationRewardAmount(new BigInteger("2765804603715826539"));
         issue15832.addRecoveredDelegation(new RecoveredDelegation("atp1m0qy0ylh7evjk2yfrezkmaylwz32c4n3ttqukp", new BigInteger("1000000000000000000")));
         issue15832.addRecoveredDelegation(new RecoveredDelegation("atp1nmy3lfpxk0r7rezr5hjdscqsulwjlfprmjundm", new BigInteger("1000000000000000000")));
         issue15832.addRecoveredDelegation(new RecoveredDelegation("atp16a5f649vmwk3842jcwajrfqtjrsu5rlfxx8v2h", new BigInteger("1000000000000000000")));
