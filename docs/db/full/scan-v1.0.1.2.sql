@@ -1,5 +1,5 @@
 -- 全量脚本
-CREATE DATABASE IF NOT EXISTS `scan_platon` DEFAULT CHARACTER SET utf8mb4;
+CREATE DATABASE IF NOT EXISTS `scan_platon` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `scan_platon`;
 
 DROP TABLE IF EXISTS `address`;
@@ -79,6 +79,8 @@ CREATE TABLE `delegation` (
                               KEY `node_id` (`node_id`) USING BTREE,
                               KEY `staking_block_num` (`staking_block_num`) USING BTREE
 );
+
+/*Table structure for table `gas_estimate` */
 
 DROP TABLE IF EXISTS `gas_estimate`;
 CREATE TABLE `gas_estimate` (
@@ -205,7 +207,6 @@ CREATE TABLE `node` (
   `zero_produce_freeze_duration` int(11) DEFAULT NULL COMMENT '零出块节点锁定结算周期数',
   `zero_produce_freeze_epoch` int(11) DEFAULT NULL COMMENT '零出块锁定时所在结算周期',
   `low_rate_slash_count` int(11) NOT NULL DEFAULT '0' COMMENT '节点零出块次数',
-  `node_settle_statis_info` text COMMENT '节点结算周期的出块统计信息',
   PRIMARY KEY (`node_id`),
   KEY `node_id` (`node_id`) USING BTREE,
   KEY `status` (`status`),
@@ -388,7 +389,7 @@ CREATE TABLE `token` (
                          `type` varchar(64) NOT NULL COMMENT '合约类型 erc20 erc721',
                          `name` varchar(64) DEFAULT NULL COMMENT '合约名称',
                          `symbol` varchar(64) DEFAULT NULL COMMENT '合约符号',
-                         `total_supply` varchar(128) DEFAULT NULL COMMENT '总供应量',
+                         `total_supply` decimal(64,0) DEFAULT NULL COMMENT '供应总量',
                          `decimal` int(11) DEFAULT NULL COMMENT '合约精度',
                          `is_support_erc165` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支持erc165接口： 0-不支持 1-支持',
                          `is_support_erc20` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支持erc20接口： 0-不支持 1-支持',
@@ -425,7 +426,7 @@ DROP TABLE IF EXISTS `token_holder`;
 CREATE TABLE `token_holder` (
                                 `token_address` varchar(64) NOT NULL COMMENT '合约地址',
                                 `address` varchar(64) NOT NULL COMMENT '用户地址',
-                                `balance` varchar(128) DEFAULT NULL COMMENT '地址代币余额, ERC20为金额，ERC721为tokenId数',
+                                `balance` decimal(64,0) DEFAULT NULL COMMENT '地址代币余额, ERC20为金额，ERC721为tokenId数',
                                 `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                 `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                 `token_tx_qty` int(11) NOT NULL DEFAULT '0' COMMENT 'erc721 token对应的交易数',
@@ -434,22 +435,20 @@ CREATE TABLE `token_holder` (
 
 DROP TABLE IF EXISTS `token_inventory`;
 CREATE TABLE `token_inventory` (
-                                   `token_address` varchar(64) NOT NULL COMMENT '合约地址',
-                                   `token_id` varchar(128) NOT NULL COMMENT 'token id',
-                                   `owner` varchar(64) NOT NULL COMMENT 'token id 对应持有者地址',
-                                   `name` varchar(256) DEFAULT NULL COMMENT 'Identifies the asset to which this NFT represents',
-                                   `description` longtext COMMENT 'Describes the asset to which this NFT represents',
-                                   `image` varchar(256) DEFAULT NULL COMMENT 'A URI pointing to a resource with mime type image/* representing the asset to which this NFT represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive.',
+                                   `token_address` varchar(64)  NOT NULL COMMENT '合约地址',
+                                   `token_id` varchar(128)  NOT NULL COMMENT 'token id',
+                                   `owner` varchar(64)  NOT NULL COMMENT 'token id 对应持有者地址',
+                                   `name` varchar(256)  DEFAULT NULL COMMENT 'Identifies the asset to which this NFT represents',
+                                   `description` longtext  COMMENT 'Describes the asset to which this NFT represents',
+                                   `image` varchar(256)  DEFAULT NULL COMMENT 'A URI pointing to a resource with mime type image/* representing the asset to which this NFT represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive.',
                                    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                    `token_tx_qty` int(11) NOT NULL DEFAULT '0' COMMENT 'tokenaddress和tokenid的对应交易数',
                                    `token_owner_tx_qty` int(11) DEFAULT '0' COMMENT 'owner对该tokenaddress和tokenid的对应交易数',
-                                   `small_image` varchar(256) DEFAULT NULL COMMENT '缩略图',
-                                   `medium_image` varchar(256) DEFAULT NULL COMMENT '中等缩略图',
-                                   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
-                                   PRIMARY KEY (`id`),
-                                   UNIQUE KEY `token_address` (`token_address`,`token_id`)
-);
+                                   `small_image` varchar(256)  DEFAULT NULL COMMENT '缩略图',
+                                   `medium_image` varchar(256)  DEFAULT NULL COMMENT '中等缩略图',
+                                   PRIMARY KEY (`token_address`,`token_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 DROP TABLE IF EXISTS `tx_bak`;
 CREATE TABLE `tx_bak` (
@@ -489,14 +488,9 @@ CREATE TABLE `internal_address` (
 );
 
 -- 初始化数据
-INSERT INTO `token_expand` ( `address`, `is_show_in_aton`, `is_show_in_scan`, `is_can_transfer`, `create_id`, `create_name`, `update_id`, `update_name` )
-VALUES
-( 'atp1w4vvn96ll9w0rmyeh77ku2tlvyz545mam8rldk', 1, 1, 0, '1', 'admin', '1', 'admin' ),
-( 'atp16lellpkrv894hmg8am7ns3p2qny2vqj85ud8s6', 1, 1, 1, '1', 'admin', '1', 'admin' ),
-( 'atp1h3y5wt82z09amcd4mrhpz4jt543t5r9td9v49s', 1, 1, 1, '1', 'admin', '1', 'admin' );
 
 INSERT INTO `internal_address` (`address`,`type`)
-VALUES ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp8h9fxw', 1),
-       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzfyslg3', 2),
-       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr5jy24r', 3),
-       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxxwje8t', 6);
+VALUES ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp7pn3ep', 1),
+       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzsjx8h7', 2),
+       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqrdyjj2v', 3),
+       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxlcypcy', 6);

@@ -1,6 +1,9 @@
 package com.platon.browser.analyzer.epoch;
 
+import com.platon.browser.bean.CommonConstant;
 import com.platon.browser.service.statistic.StatisticService;
+import com.platon.browser.utils.ChainVersionUtil;
+import com.platon.browser.v0160.service.DelegateBalanceAdjustmentService;
 import com.platon.contracts.ppos.dto.resp.GovernParam;
 import com.platon.contracts.ppos.dto.resp.TallyResult;
 import com.platon.browser.bean.CollectionEvent;
@@ -76,18 +79,21 @@ public class OnNewBlockAnalyzer {
     @Resource
     private StatisticService statisticService;
 
+    @Resource
+    private DelegateBalanceAdjustmentService delegateBalanceAdjustmentService;
+
     public void analyze(CollectionEvent event, Block block) throws NoSuchBeanException {
 
         long startTime = System.currentTimeMillis();
 
         networkStatCache.getNetworkStat().setCurNumber(event.getBlock().getNum());
         NewBlock newBlock = NewBlock.builder()
-                .nodeId(block.getNodeId())
-                .stakingBlockNum(nodeCache.getNode(block.getNodeId()).getStakingBlockNum())
-                .blockRewardValue(event.getEpochMessage().getBlockReward())
-                .feeRewardValue(new BigDecimal(block.getTxFee()))
-                .predictStakingReward(event.getEpochMessage().getStakeReward())
-                .build();
+                                    .nodeId(block.getNodeId())
+                                    .stakingBlockNum(nodeCache.getNode(block.getNodeId()).getStakingBlockNum())
+                                    .blockRewardValue(event.getEpochMessage().getBlockReward())
+                                    .feeRewardValue(new BigDecimal(block.getTxFee()))
+                                    .predictStakingReward(event.getEpochMessage().getStakeReward())
+                                    .build();
 
         newBlockMapper.newBlock(newBlock);
 
@@ -103,9 +109,11 @@ public class OnNewBlockAnalyzer {
             for (String hash : proposalTxHashSet) {
                 try {
                     TallyResult tr = proposalService.getTallyResult(hash);
-                    if (tr == null)
+                    if (tr == null) {
                         continue;
-                    if (tr.getStatus() == CustomProposal.StatusEnum.PASS.getCode() || tr.getStatus() == CustomProposal.StatusEnum.FINISH.getCode()) {
+                    }
+                    if (tr.getStatus() == CustomProposal.StatusEnum.PASS.getCode() || tr.getStatus() == CustomProposal.StatusEnum.FINISH
+                            .getCode()) {
                         // 提案通过（参数提案，status=2）||提案生效（升级提案,status=5）：
                         // 把提案表中的参数覆盖到Config表中对应的参数
                         Proposal proposal = proposalMap.get(hash);
@@ -138,12 +146,20 @@ public class OnNewBlockAnalyzer {
                             String configPipid = v0150Config.getAdjustmentPipId();
                             if (proposalVersion.compareTo(configVersion) >= 0 && proposalPipid.equals(configPipid)) {
                                 // 升级提案版本号及提案ID与配置文件中指定的一样，则执行调账逻辑
-                                List<AdjustParam> adjustParams = specialApi.getStakingDelegateAdjustDataList(platOnClient.getWeb3jWrapper().getWeb3j(), BigInteger.valueOf(block.getNum()));
+                                List<AdjustParam> adjustParams = specialApi.getStakingDelegateAdjustDataList(
+                                        platOnClient.getWeb3jWrapper().getWeb3j(),
+                                        BigInteger.valueOf(block.getNum()));
                                 adjustParams.forEach(param -> {
                                     param.setBlockTime(block.getTime());
                                     param.setSettleBlockCount(chainConfig.getSettlePeriodBlockCount());
                                 });
                                 stakingDelegateBalanceAdjustmentService.adjust(adjustParams);
+                            }
+                            // alaya主网兼容底层升级到0.16.0的调账功能，对应底层issue1583
+                            BigInteger v0160Version = ChainVersionUtil.toBigIntegerVersion(CommonConstant.V0160_VERSION);
+                            if (proposalVersion.compareTo(v0160Version) == 0 && CommonConstant.ALAYA_CHAIN_ID == chainConfig
+                                    .getChainId()) {
+                                delegateBalanceAdjustmentService.adjust();
                             }
                         }
                     }

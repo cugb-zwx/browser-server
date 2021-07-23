@@ -1,14 +1,11 @@
-#######################
-#      Alaya配置      #
-#######################
-profile: dev
+profile: alaya
 # 密码加密配置
 jasypt:
   encryptor:
     password: ${JASYPT_ENCRYPTOR_PASSWORD:}
 #性能配置
 server:
-  port: 9061
+  port: 50010
   tomcat:
     max-connections: 20000
     threads:
@@ -19,12 +16,12 @@ spring:
   #数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://_DB_HOST_:_DB_PORT_/alaya_browser_dev?useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    url: jdbc:mysql://192.168.9.191:3306/scan_${profile}?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
     # 使用p6spy监控SQL
     # driver-class-name: com.p6spy.engine.spy.P6SpyDriver
-    # url: jdbc:p6spy:mysql://_DB_HOST_:_DB_PORT_/alaya_browser_0.15.2.0_hyp?useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
-    username: _DB_USER_
-    password: _DB_PASS_
+    # url: jdbc:p6spy:mysql://192.168.9.191:3306/alaya_browser_${profile}?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: ENC(bpshgjWOgn2d+oGmSTBPNA==)
+    password: ENC(bpshgjWOgn2d+oGmSTBPNA==)
     #下面为连接池的补充设置，应用到上面所有数据源中
     #初始化大小，最小，最大
     initialSize: 5
@@ -45,19 +42,18 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 100
   #Redis配置
   redis:
-    password: _REDIS_PWD_
-    database: 0
+    password: platscan
     cluster:
       max-redirects: 3
-      nodes: _REDIS_IPS_
+      nodes: 192.168.9.191:7001,192.168.9.191:7002,192.168.9.191:7003,192.168.9.191:7004,192.168.9.191:7005,192.168.9.191:7006
   #ES配置
   elasticsearch:
     high-level-client:
-      hosts: _ES_IPS_
-      port: _ES_PORT_
+      hosts: 192.168.120.103,192.168.120.104,192.168.120.105
+      port: 9200
       schema: http
-      username: _ES_USER_
-      password: _ES_PWD_
+      username: elastic
+      password: changeme
 #日志配置
 logging:
   #日志级别
@@ -71,18 +67,8 @@ logging:
   file:
     name: ./logs/${spring.application.name}-${profile}.log
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %thread | trace-id[%X{trace-id}] | %logger{50} | %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %thread | trace-id[%X{trace-id}] | %logger{50} | %msg%n"
-  logback:
-    rollingpolicy:
-      # 日志文件大小上限，达到该上限后，会自动压缩
-      max-file-size: 200MB
-      # 日志归档的文件名，日志文件达到一定大小之后，自动进行压缩归档
-      file-name-pattern: ./logs/${spring.application.name}-${profile}-%d{yyyy-MM-dd}-%i.log.gz
-      # 日志文件保存的天数
-      max-history: 7
-      # 是否在应用启动时进行归档管理
-      clean-history-on-start: true
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %thread | trace-id[%X{trace-id}] | %logger{50}[%L] | %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %thread | trace-id[%X{trace-id}] | %logger{50}[%L] | %msg%n"
 #初始化链相关的配置
 platon:
   # 地址HRP前缀
@@ -123,7 +109,7 @@ platon:
   #区块最大Gas限制
   maxBlockGasLimit: 201600000
   #提案url参数模板
-  proposalUrlTemplate: https://github.com/PlatONnetwork/PIPs/tree/master/Alaya/PIP-%s.md
+  proposalUrlTemplate: https://github.com/AlayaNetwork/AIPs/tree/master/Alaya/AIP-%s.md
   #keysBase网址
   keyBase: https://keybase.io/
   #keyBase api
@@ -142,4 +128,4 @@ limit:
   num: 10
 output:
   file:
-    url: ./
+    url: /var/tmp
