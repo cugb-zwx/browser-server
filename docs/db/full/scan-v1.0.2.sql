@@ -1,6 +1,6 @@
 -- 全量脚本
-CREATE DATABASE IF NOT EXISTS `scan_platon` DEFAULT CHARACTER SET utf8mb4;
-USE `scan_platon`;
+CREATE DATABASE IF NOT EXISTS `scan_alaya` DEFAULT CHARACTER SET utf8mb4;
+USE `scan_alaya`;
 
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address` (
