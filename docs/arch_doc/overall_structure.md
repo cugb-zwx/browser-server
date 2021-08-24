@@ -12,7 +12,7 @@
 > 区块同步分析服务，主要功能是对区块数据采集分析，最终存入数据库系统
 
 #### 特殊节点
-> 区别于普通节点，提供批量查询账户余额接口、查询历史验证人列表接口等接口。 [特殊节点](https://github.com/PlatONnetwork/PlatON-Go/tree/special-alaya-develop)
+> 区别于普通节点，提供批量查询账户余额接口、查询历史验证人列表接口等接口。 [特殊节点](https://github.com/AlayaNetwork/Alaya-Go/releases/tag/special_alaya_v0.16.0)
 
 #### 数据存储
 ##### redis
