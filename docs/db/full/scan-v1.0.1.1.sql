@@ -487,6 +487,7 @@ CREATE TABLE `internal_address` (
                                     KEY `type` (`type`) USING BTREE
 );
 
+
 -- 初始化数据
 INSERT INTO `token_expand` ( `address`, `is_show_in_aton`, `is_show_in_scan`, `is_can_transfer`, `create_id`, `create_name`, `update_id`, `update_name` )
 VALUES
