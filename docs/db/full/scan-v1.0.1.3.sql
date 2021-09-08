@@ -1,6 +1,6 @@
 -- 全量脚本
-CREATE DATABASE IF NOT EXISTS `scan_platon` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `scan_platon`;
+CREATE DATABASE IF NOT EXISTS `scan_alaya` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `scan_alaya`;
 
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address` (
@@ -487,10 +487,16 @@ CREATE TABLE `internal_address` (
                                     KEY `type` (`type`) USING BTREE
 );
 
+
 -- 初始化数据
+INSERT INTO `token_expand` ( `address`, `is_show_in_aton`, `is_show_in_scan`, `is_can_transfer`, `create_id`, `create_name`, `update_id`, `update_name` )
+VALUES
+( 'atp1w4vvn96ll9w0rmyeh77ku2tlvyz545mam8rldk', 1, 1, 0, '1', 'admin', '1', 'admin' ),
+( 'atp16lellpkrv894hmg8am7ns3p2qny2vqj85ud8s6', 1, 1, 1, '1', 'admin', '1', 'admin' ),
+( 'atp1h3y5wt82z09amcd4mrhpz4jt543t5r9td9v49s', 1, 1, 1, '1', 'admin', '1', 'admin' );
 
 INSERT INTO `internal_address` (`address`,`type`)
-VALUES ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp7pn3ep', 1),
-       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzsjx8h7', 2),
-       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqrdyjj2v', 3),
-       ('lat1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxlcypcy', 6);
+VALUES ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp8h9fxw', 1),
+       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzfyslg3', 2),
+       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr5jy24r', 3),
+       ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqxxwje8t', 6);
