@@ -491,11 +491,15 @@ CREATE TABLE `internal_address` (
 );
 
 -- 初始化数据
+-- 还有部分基金会地址由运维手工导入
 INSERT INTO `token_expand` ( `address`, `is_show_in_aton`, `is_show_in_scan`, `is_can_transfer`, `create_id`, `create_name`, `update_id`, `update_name` )
 VALUES
 ( 'atp1w4vvn96ll9w0rmyeh77ku2tlvyz545mam8rldk', 1, 1, 0, '1', 'admin', '1', 'admin' ),
 ( 'atp16lellpkrv894hmg8am7ns3p2qny2vqj85ud8s6', 1, 1, 1, '1', 'admin', '1', 'admin' ),
 ( 'atp1h3y5wt82z09amcd4mrhpz4jt543t5r9td9v49s', 1, 1, 1, '1', 'admin', '1', 'admin' );
+
+update token_expand set `is_show_in_aton_admin` = 1 where `is_show_in_aton` = 1;
+update token_expand set `is_show_in_scan_admin` = 1 where `is_show_in_scan` = 1;
 
 INSERT INTO `internal_address` (`address`,`type`)
 VALUES ('atp1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp8h9fxw', 1),
