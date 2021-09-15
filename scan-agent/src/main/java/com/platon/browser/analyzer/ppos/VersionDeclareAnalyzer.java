@@ -22,7 +22,14 @@ public class VersionDeclareAnalyzer extends PPOSAnalyzer<NodeOpt> {
 
     @Resource
     private NetworkStatCache networkStatCache;
-
+    /**
+     * 版本声明分析
+     *
+     * @param event
+     * @param tx
+     * @return com.platon.browser.elasticsearch.dto.NodeOpt
+     * @date 2021/6/15
+     */
     @Override
     public NodeOpt analyze(CollectionEvent event, Transaction tx) {
         VersionDeclareParam txParam = tx.getTxParam(VersionDeclareParam.class);

@@ -66,16 +66,8 @@ subprojects {
     version "$projectVersion-$shortCommitId"
     sourceCompatibility = '1.8'
     repositories {
-
         maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
-        maven {
-            url 'https://sdk.platon.network/nexus/content/repositories/releases/'
-        }
-        maven {
-            url 'https://sdk.platon.network/nexus/content/repositories/snapshots/'
-        }
-        //maven { url "https://sdk.platon.network/nexus/content/groups/public/" }
-
+        maven { url "https://sdk.platon.network/nexus/content/groups/public/" }
         mavenCentral()
     }
 
@@ -156,7 +148,7 @@ subprojects {
                                     new Yaml().load(api.text
                                             .replace("_VERSION_", "$projectVersion")
                                             .replace("_COMMIT_ID_", shortCommitId)
-                                            .replace("_BASE_PATH_", "/browser-server")
+                                            .replace("_BASE_PATH_", "/scan-api")
                                     )
                             ).toString(), "utf-8"
                     )
