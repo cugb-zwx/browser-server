@@ -130,6 +130,7 @@ public class Transaction {
          * 2-合约调用(合约执行)
          */
         CONTRACT_EXEC(2, "合约调用(合约执行)"),
+        CONTRACT_EXEC_DESTROY(21, "合约销毁"),
         /**
          * 3-WASM合约发布(合约创建)
          */
